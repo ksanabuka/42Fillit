@@ -1,0 +1,1 @@
+# 42Fillit Fillit is a simplified variant of Tetris. The program takes a file as parameter, which contains a list of Tetriminos, and arrange them in order to create the smallest square possible. The main goal is to find the smallest square in the minimal amount of time. 
