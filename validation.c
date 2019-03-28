@@ -1,8 +1,21 @@
+
+
+// read20 ->check20chars ->delNL ->checkconnections
+// 		if (20) -OK
+// 		else  -> 0; 
+// read1 -> if (NL) -> read20must
+// 		 if (0) reaturn 1;
+
+ 
+
+
 #include <stdio.h>
 #include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 #include "libft/libft.h"
+
+
 
 
 void deletenl(char *str)
@@ -29,14 +42,14 @@ void deletenl(char *str)
 	return ;
 }
 
-// int main (void)
-// {
-// 	char  str [25] = "...#\n...#\n...#\n...#\n";
+int main (void)
+{
+	char  str [25] = "...#\n...#\n...#\n...#\n";
 
-// 	deletenl(str);
-// 	printf("%s\n", str);
+	deletenl(str);
+	printf("%s\n", str);
 
-// }
+}
 
 int validateFigureByConnections(char *s)
 {
@@ -127,7 +140,7 @@ int validate_figure_by_chars(char *s)
 int readFile(char * av)
 {
 	int i = 0;
-	int flag = 0;
+	//int flag = 0;
 
 	int fd;
 	//int status = 0;
@@ -140,8 +153,7 @@ int readFile(char * av)
 
 	while (i <= 27)
 	{
-		if (i == 27)
-			return -1;
+		
 
 		readsize = read(fd, buffer, 20);
 		printf("before deletion 	i = %d\n%s\n", i, buffer);
@@ -158,19 +170,23 @@ int readFile(char * av)
 		{			
 			return -1;
 		}
+		//add_tostructure(buffer;)
+		i++;
+		if (i == 27)
+			return -1;
 
-
-		//add_figure(t_list, buffer);
 		buffer[0] = '\0';
 
 		readsize = read(fd, buffer, 1);
 		
-		if (buffer[0] != '\n' && readsize != 1)
+		if (readsize == 0)
+		{			
+			return 5;
+		}
+		else if (buffer[0] != '\n' || readsize < 0)
 		{			
 			return -1;
 		}
-
-		i++;
 	}
 	return 1;
 }
@@ -185,7 +201,7 @@ int main(int ac, char ** av)
 
 	status = readFile(av[1]);
 	
-	if (status != 1)
+	if (status == -1)
 		printf("Not valid\n");
 	else 
 		printf("Valid\n");
