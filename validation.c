@@ -7,15 +7,104 @@
 // 		 if (0) reaturn 1;
 
  
-
+#include <fcntl.h>
 
 #include <stdio.h>
-#include <fcntl.h>
+//#include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 #include "libft/libft.h"
 
+#include <stdlib.h>
+#include "libft/libft.h"
+#include <stdio.h>
 
+typedef struct			s_tetriminos
+{
+	int					c;
+	char				*buffer;
+	struct s_tetriminos	*next;
+}						t_tetriminos;
+
+
+t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
+{
+	t_tetriminos * el;
+
+	el = (t_tetriminos *)malloc(sizeof(t_tetriminos));
+	if (!el)
+		return (0);
+	if (!head)
+		return (0);
+	el->c = i + 65;
+	el->buffer = ft_strdup(buffer);
+	if (!el->buffer)
+	{
+		free(el);
+		return (0);
+	}
+	if (!*head)
+	{
+		el->next = NULL;
+	}
+	else
+	{
+		el->next = *head;
+	}
+	*head = el;
+	return (el);
+}
+
+int cleanup(t_tetriminos ** head)
+{
+	t_tetriminos * el;
+	el = *head;
+	if (el)
+	{
+		if (el->next)
+			cleanup(&el->next);
+		free(el->buffer);
+		free(el);
+		*head = NULL;
+	}
+	return 1;
+}
+
+
+// int main(void)
+// {
+// 	t_tetriminos *head = NULL; 
+// 	t_tetriminos *el = NULL; 
+
+// 	char buffer1[17] = "mama";
+// 	char buffer2[17] = "HURRAAA";
+// 	char buffer3[17] = "i love papulya";
+// 	int status; 
+// 	el = add_tetrimonos(buffer1, &head);
+// 	el = add_tetrimonos(buffer2, &head);
+// 	el = add_tetrimonos(buffer3, &head);
+
+// 	el = head; 
+// 	while (el)
+// 		{
+// 			printf("%s\n", (el)->buffer);
+// 			el = (el)->next;
+// 		}	
+// 	el = head;
+// 	status = cleanup(&head);
+
+// 	// if (el)
+// 	// {
+// 	// 	while (el)
+// 	// 		{
+// 	// 			printf("%s\n", (el)->buffer);
+// 	// 			el = (el)->next;
+// 	// 		}	
+// 	// }
+// 	//system("leaks a.out");
+// 	return 0;
+
+// }
 
 
 void deletenl(char *str)
@@ -42,14 +131,14 @@ void deletenl(char *str)
 	return ;
 }
 
-int main (void)
-{
-	char  str [25] = "...#\n...#\n...#\n...#\n";
+// int main (void)
+// {
+// 	char  str [25] = "...#\n...#\n...#\n...#\n";
 
-	deletenl(str);
-	printf("%s\n", str);
+// 	deletenl(str);
+// 	printf("%s\n", str);
 
-}
+// }
 
 int validateFigureByConnections(char *s)
 {
@@ -147,48 +236,56 @@ int readFile(char * av)
 	int readsize;
 	char buffer[21];
 	ft_bzero(buffer, 21);
-
+	t_tetriminos *head = NULL;
+	t_tetriminos *el;
+	int status;
 
 	fd = open(av, O_RDONLY);
 
 	while (i <= 27)
 	{
-		
-
 		readsize = read(fd, buffer, 20);
-		printf("before deletion 	i = %d\n%s\n", i, buffer);
-
 		if (readsize != 20 || !validate_figure_by_chars(buffer))
-		{			
+		{	
+			status = cleanup(&head);
 			return -1;
 		}
 		deletenl(buffer);
-		printf("after deletion 	i = %d\n%s\n", i, buffer);
-
-		if (!validateFigureByConnections(buffer))
-			
+		if (!validateFigureByConnections(buffer))	
 		{			
-			return -1;
+			status = cleanup(&head);
+			return -1;		
 		}
-		//add_tostructure(buffer;)
+		el = add_tetrimonos(buffer, &head, i);
+		if (!(el))
+		{			
+			status = cleanup(&head);
+			return -1;		
+		}
 		i++;
 		if (i == 27)
-			return -1;
-
-		buffer[0] = '\0';
-
-		readsize = read(fd, buffer, 1);
-		
-		if (readsize == 0)
 		{			
+			status = cleanup(&head);
+			return -1;		
+		}
+		buffer[0] = '\0';
+		readsize = read(fd, buffer, 1);		
+		if (readsize == 0)
+		{		
+			while (head)
+			{
+				printf("%c	%s\n", (head)->c,(head)->buffer);
+				head = (head)->next;
+			}	
 			return 5;
 		}
 		else if (buffer[0] != '\n' || readsize < 0)
 		{			
-			return -1;
+			status = cleanup(&head);
+			return -1;		
 		}
 	}
-	return 1;
+			return 5;
 }
 
 
