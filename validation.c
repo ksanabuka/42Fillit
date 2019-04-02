@@ -196,14 +196,43 @@ int validate_figure_by_chars(char *s)
 		return (1);
 }
 
-int optSq(int qtyFig)
+int MinArrWidth(int qtyFig)
 {
-	int arr [11] = {0, 0, 0, 16, 25, 36, 49, 64, 81, 100, 121};
-
-	
-
+	int arr [11] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121};
 	int sq = qtyFig * 4;
+	int i = 0;
+	if (sq <= 16)
+		return 4;
+
+	while (i < 11)
+	{
+		if (sq == arr[i])
+			return i + 1; 
+
+		else if (i != 10 && sq > arr[i] && sq < arr[i + 1])
+		{
+			return (i + 1 + 1);
+		}
+		else if (i == 10 && sq > 100 && sq < 121)
+			return 11;
+		i++;
+	}
+	return i;
 }
+
+// int main (void)
+// {
+// 	int tab[26] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26};
+// 	int i = 0;
+// 	while (i < 26)
+// 	{
+// 		printf("for	%d figs - sq side length is -	%d\n", i + 1, MinArrWidth(tab[i]));
+// 		i++;
+// 	}
+// 	return 0;
+// }
+
+
 
 // int main (void)
 // {
@@ -291,22 +320,22 @@ int readFile(char * av)
 }
 
 
-int main(int ac, char ** av)
-{
-	if (ac != 2)
-		return -5; // show usage
+// int main(int ac, char ** av)
+// {
+// 	if (ac != 2)
+// 		return -5; // show usage
 
-	int status;
+// 	int status;
 
-	status = readFile(av[1]);
+// 	status = readFile(av[1]);
 	
-	if (status == -1)
-		printf("Not valid\n");
-	else 
-		printf("Valid\n");
+// 	if (status == -1)
+// 		printf("Not valid\n");
+// 	else 
+// 		printf("Valid\n");
 
-	return 0;
-}
+// 	return 0;
+// }
 
 
 
