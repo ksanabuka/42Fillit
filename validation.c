@@ -1,16 +1,9 @@
 
 
-// read20 ->check20chars ->delNL ->checkconnections
-// 		if (20) -OK
-// 		else  -> 0; 
-// read1 -> if (NL) -> read20must
-// 		 if (0) reaturn 1;
 
- 
 #include <fcntl.h>
 
 #include <stdio.h>
-//#include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
 #include "libft/libft.h"
@@ -201,6 +194,15 @@ int validate_figure_by_chars(char *s)
 		return (0);
 	else 
 		return (1);
+}
+
+int optSq(int qtyFig)
+{
+	int arr [11] = {0, 0, 0, 16, 25, 36, 49, 64, 81, 100, 121};
+
+	
+
+	int sq = qtyFig * 4;
 }
 
 // int main (void)
