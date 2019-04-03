@@ -14,7 +14,9 @@
 typedef struct			s_tetriminos
 {
 	int					c;
+	int 				arr [6];
 	char				*buffer;
 	struct s_tetriminos	*next;
 }						t_tetriminos;
 
+int readFile(char * av, t_tetriminos **head);

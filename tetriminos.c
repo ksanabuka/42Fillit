@@ -2,11 +2,11 @@
 #include "libft/libft.h"
 #include <stdio.h>
 
-typedef struct		s_tetriminos
+typedef struct				s_tetriminos
 {
-	char			*buffer;
-	struct s_tetriminos	*next;
-}					t_tetriminos;
+	char					*buffer;
+	struct s_tetriminos		*next;
+}							t_tetriminos;
 
 void add_tetrimonos(char *buffer, t_tetriminos **head)
 {

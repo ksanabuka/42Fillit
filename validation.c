@@ -238,7 +238,7 @@ int MinArrWidth(int qtyFig)
 // 	return 0;
 // }
 
-int readFile(char * av)
+int readFile(char * av, t_tetriminos **head)
 {
 	int i = 0;
 	//int flag = 0;
@@ -248,7 +248,6 @@ int readFile(char * av)
 	int readsize;
 	char buffer[21];
 	ft_bzero(buffer, 21);
-	t_tetriminos *head = NULL;
 	t_tetriminos *el;
 	int status;
 
@@ -259,41 +258,41 @@ int readFile(char * av)
 		readsize = read(fd, buffer, 20);
 		if (readsize != 20 || !validate_figure_by_chars(buffer))
 		{	
-			status = cleanup(&head);
+			status = cleanup(head);
 			return -1;
 		}
 		deletenl(buffer);
 		if (!validateFigureByConnections(buffer))	
 		{			
-			status = cleanup(&head);
+			status = cleanup(head);
 			return -1;		
 		}
-		el = add_tetrimonos(buffer, &head, i);
+		el = add_tetrimonos(buffer, head, i);
 		if (!(el))
 		{			
-			status = cleanup(&head);
+			status = cleanup(head);
 			return -1;		
 		}
 		i++;
 		if (i == 27)
 		{			
-			status = cleanup(&head);
+			status = cleanup(head);
 			return -1;		
 		}
 		buffer[0] = '\0';
 		readsize = read(fd, buffer, 1);		
 		if (readsize == 0)
 		{		
-			while (head)
-			{
-				printf("%c	%s\n", (head)->c,(head)->buffer);
-				head = (head)->next;
-			}	
+			// while (*head)
+			// {
+			// 	printf("%c	%s\n", (*head)->c,(*head)->buffer);
+			// 	*head = (*head)->next;
+			// }	
 			return 5;
 		}
 		else if (buffer[0] != '\n' || readsize < 0)
 		{			
-			status = cleanup(&head);
+			status = cleanup(head);
 			return -1;		
 		}
 	}
@@ -303,12 +302,14 @@ int readFile(char * av)
 
 // int main(int ac, char ** av)
 // {
+// 	t_tetriminos *head = NULL;
+
 // 	if (ac != 2)
 // 		return -5; // show usage
 
 // 	int status;
 
-// 	status = readFile(av[1]);
+// 	status = readFile(av[1], &head);
 	
 // 	if (status == -1)
 // 		printf("Not valid\n");
