@@ -32,7 +32,7 @@ int *make_fig_coordinates(char *str)
 	char *x;
 	char *y;
 
-	xy_arr = (int *)malloc(sizeof(int) * 7);
+	xy_arr = (int *)malloc(sizeof(int) * 8);
 	x = "0123012301230123";
 	y = "0000111122223333";
 	i = 0;
