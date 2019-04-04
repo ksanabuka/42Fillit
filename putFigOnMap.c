@@ -138,14 +138,32 @@ udalyaem prev figure stavim druguyu
 
 esli figur net a yachejka odna pustaya -> znachit tak zhe rabotaem s i++-pustyh yacheek 
 
-
-setFreeCell(coords, map);
-status = putFigOnMap(map, coords[0], coords[1], cur);
-if (!status)
-	cur = findFigtoMap(t_tetriminos ** head);
-	if (!cur)
-		deMapFig(last);
-	status = putFigOnMap()
+void rec_putFigOnMap(map, coords[0], coords[1], cur)
+{
+	while (status)
+	{
+		setFreeCell(coords, map);
+		cur = findFigtoMap(t_tetriminos ** head);
+		status = putFigOnMap(map, coords[0], coords[1], cur);
+	}
+	//if (all figures - in map) - done! i vyhod s recursion; 
+	if (!status)
+	{
+		cur = findFigtoMap(t_tetriminos ** head);
+		if (!cur)
+			deMapFig(last);
+				if (!whatTodeMap)
+				{
+					all_markers_to_0();
+					empty_cell++;
+					if (empy_cell + qty_fig * 4 > optimal_square)
+						optimal_square_side++;
+				}
+					
+		status = rec_putFigOnMap();
+	}
+	
+}
 
 
 int fig_counter = 0;
