@@ -13,10 +13,13 @@
 
 typedef struct			s_tetriminos
 {
+	int 				status;
 	int					c;
-	int 				arr [6];
+	int 				*arr;
 	char				*buffer;
 	struct s_tetriminos	*next;
 }						t_tetriminos;
 
 int readFile(char * av, t_tetriminos **head);
+int *make_fig_coordinates(char *str);
+

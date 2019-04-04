@@ -12,6 +12,9 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 		return (0);
 	el->c = i + 65;
 	el->buffer = ft_strdup(buffer);
+	el->status = 0;
+	el->arr = make_fig_coordinates(el->buffer);
+
 	if (!el->buffer)
 	{
 		free(el);
@@ -37,6 +40,7 @@ int cleanup(t_tetriminos ** head)
 	{
 		if (el->next)
 			cleanup(&el->next);
+		free(el->arr);
 		free(el->buffer);
 		free(el);
 		*head = NULL;
@@ -286,6 +290,16 @@ int readFile(char * av, t_tetriminos **head)
 			// while (*head)
 			// {
 			// 	printf("%c	%s\n", (*head)->c,(*head)->buffer);
+				
+			// 	printf("%d ", (*head)->arr[0]);
+			// 	printf("%d ", (*head)->arr[1]);
+			// 	printf("%d ", (*head)->arr[2]);
+			// 	printf("%d ", (*head)->arr[3]);
+			// 	printf("%d ", (*head)->arr[4]);
+			// 	printf("%d ", (*head)->arr[5]);
+			// 	printf("%d ", (*head)->arr[6]);
+			// 	printf("%d ", (*head)->arr[7]);
+
 			// 	*head = (*head)->next;
 			// }	
 			return 5;

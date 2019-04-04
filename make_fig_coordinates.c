@@ -56,37 +56,37 @@ int *make_fig_coordinates(char *str)
 	// 	i++;
 	// }
 	convert_coordinates(&xy_arr);
-	i = 0;
-	printf("%s\n", "-------------------------\n");
-	printf("%s\n", "Absolute coordinates array\n");
-	while (i < 8)
-	{
-		printf("%d\n", xy_arr[i]);
-		i++;
-	}
+	// i = 0;
+	// printf("%s\n", "-------------------------\n");
+	// printf("%s\n", "Absolute coordinates array\n");
+	// while (i < 8)
+	// {
+	// 	printf("%d\n", xy_arr[i]);
+	// 	i++;
+	// }
 	return(xy_arr);
 }
 
 
 
-int main()
-{
-	char *s1 = "..,#...#...#...#";
-	char *s2 = "............####";
-	char *s3 = ".###...#........";
-	char *s4 = "......##.##.....";
-	char *s5 = "......##.##....#";
-	char *s6 = "......##.##....#";
-	char *s7 = "#..#........#..#";
-	char *s8 = "##..........#..#";
-	make_fig_coordinates(s1);
-	make_fig_coordinates(s2);
-	make_fig_coordinates(s3);
-	make_fig_coordinates(s4);
-	make_fig_coordinates(s5);
-	make_fig_coordinates(s6);
-	make_fig_coordinates(s7);
-	make_fig_coordinates(s8);
+// int main()
+// {
+// 	char *s1 = "..,#...#...#...#";
+// 	char *s2 = "............####";
+// 	char *s3 = ".###...#........";
+// 	char *s4 = "......##.##.....";
+// 	char *s5 = "......##.##....#";
+// 	char *s6 = "......##.##....#";
+// 	char *s7 = "#..#........#..#";
+// 	char *s8 = "##..........#..#";
+// 	make_fig_coordinates(s1);
+// 	make_fig_coordinates(s2);
+// 	make_fig_coordinates(s3);
+// 	make_fig_coordinates(s4);
+// 	make_fig_coordinates(s5);
+// 	make_fig_coordinates(s6);
+// 	make_fig_coordinates(s7);
+// 	make_fig_coordinates(s8);
 
-	return 0;
-}
+// 	return 0;
+// }
