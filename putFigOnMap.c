@@ -15,6 +15,18 @@ char **createMap(int length)
 	return res;
 }
 
+void **freemap(char ** map)
+{
+	int length = ft_strlen(map[0]);
+	int i = 0;
+	while (i < length)
+	{
+		free(map[i]);
+		i++; 
+	}
+	free(map);
+}
+
 t_tetriminos *findFigInStr(int c, t_tetriminos **head)
 {
 	t_tetriminos * el = 
@@ -56,9 +68,60 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 		return 1;
 	}
 	else 
+	{
+		figure->status = -1;
 		return 0; 
+	}
 }
 
+int deMapFig(char ** map, t_tetriminos ** head, t_tetriminos * figure)
+{
+	int i = 0;
+	int j = 0;
+	char *tmp;
+
+	while (i < ft_strlen(map[0]))
+	{
+		
+		while ((tmp = ft_strchr(map[i], figure->c) != NULL))
+			*tmp = '.';
+		i++;
+	}
+	figure->status = -1;
+	
+}
+void mark_cur_fig_minus(t_tetriminos * figure)
+{
+	figure->status = -1;
+}
+void StatusMinusToZero(t_tetriminos ** head)
+{
+	t_tetriminos * el;
+	el = *head;
+		
+		while (el)
+		{
+			if (el->status == -1)
+				el->status = 0;
+			el = el->next; 
+		}
+}
+
+
+
+int WasAt00(t_tetriminos ** head)
+{
+	t_tetriminos * el;
+	el = *head;
+		
+		while (el)
+		{
+			if (el->wasAt00 != 1)
+				return 0;
+			el = el->next;
+		}
+		return 1;
+}
 // int main (void)
 // {
 // 	 
@@ -127,16 +190,29 @@ int main(int ac, char ** av)
 	return 0;
 }
 
-stavim fig poka stavitsa
-esli ne postavilas ->ischem druguyu fig poka oni ne finish; 
-probuem drugie fig 
-elsi vse fig pereprobovali i  oni ne stavyatsya s i-pustyh cells -> 
+void all_markers_to_0(t_tetriminos ** head)
+{
+	t_tetriminos * el;
+	el = *head;
+		
+		while (el)
+		{
+			el->wasAt00 = 0;
+			el->status = 0;
+			el = el->next;
+		}
+}
+
+// stavim fig poka stavitsa
+// esli ne postavilas ->ischem druguyu fig poka oni ne finish; 
+// probuem drugie fig 
+// elsi vse fig pereprobovali i  oni ne stavyatsya s i-pustyh cells -> 
 
 
-udalyaem prev figure stavim druguyu
+// udalyaem prev figure stavim druguyu
 
 
-esli figur net a yachejka odna pustaya -> znachit tak zhe rabotaem s i++-pustyh yacheek 
+// esli figur net a yachejka odna pustaya -> znachit tak zhe rabotaem s i++-pustyh yacheek 
 
 void rec_putFigOnMap(map, coords[0], coords[1], cur)
 {
@@ -145,22 +221,45 @@ void rec_putFigOnMap(map, coords[0], coords[1], cur)
 		setFreeCell(coords, map);
 		cur = findFigtoMap(t_tetriminos ** head);
 		status = putFigOnMap(map, coords[0], coords[1], cur);
+		if (status)
+			t_tetriminos * last = cur;
+
+		if (fig_counter == count_1())
+			display_map(); 
+		if (status)
+			all_-1_to_0();
+
 	}
 	//if (all figures - in map) - done! i vyhod s recursion; 
+	char ** tmp; 
 	if (!status)
 	{
 		cur = findFigtoMap(t_tetriminos ** head);
+		
+
+		
+
 		if (!cur)
-			deMapFig(last);
-				if (!whatTodeMap)
+		{
+			StatusMinusToZero(t_tetriminos ** head)
+			deMapFig(map, head, figure);
+
+			if (!cur && WasAt00(head) == 1)
+			{
+				all_markers_to_0(head);
+				empty_cell++;
+				if (empy_cell + (*head)->qty_fig) * 4 > ft_strlen(map[0]) * ft_strlen(map[0]))
 				{
-					all_markers_to_0();
-					empty_cell++;
-					if (empy_cell + qty_fig * 4 > optimal_square)
-						optimal_square_side++;
+					tmp = createMap(ft_strlen(map[0]) + 1);
+					freemap(map);
+					map = tmp;
 				}
 					
-		status = rec_putFigOnMap();
+			}
+		}
+
+
+		status = rec_putFigOnMap(map, coords[0], coords[1], cur);
 	}
 	
 }

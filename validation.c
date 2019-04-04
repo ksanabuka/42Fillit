@@ -13,6 +13,8 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	el->c = i + 65;
 	el->buffer = ft_strdup(buffer);
 	el->status = 0;
+	el->wasAt00 = 0;
+	el->qty_fig = 0;
 	el->arr = make_fig_coordinates(el->buffer);
 
 	if (!el->buffer)
@@ -31,6 +33,19 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	*head = el;
 	return (el);
 }
+
+void setQtyFig(int i, t_tetriminos ** head)
+{
+	t_tetriminos * el;
+	el = *head;
+
+	while(el)
+	{
+		el->qty_fig = i;
+		el = el->next;
+	}
+}
+
 
 int cleanup(t_tetriminos ** head)
 {
@@ -302,6 +317,7 @@ int readFile(char * av, t_tetriminos **head)
 
 			// 	*head = (*head)->next;
 			// }	
+			setQtyFig(i, head);
 			return 5;
 		}
 		else if (buffer[0] != '\n' || readsize < 0)
@@ -310,6 +326,7 @@ int readFile(char * av, t_tetriminos **head)
 			return -1;		
 		}
 	}
+	
 			return 5;
 }
 

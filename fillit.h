@@ -16,6 +16,8 @@ typedef struct			s_tetriminos
 	int 				status;
 	int					c;
 	int 				*arr;
+	int 				wasAt00;
+	int 				qty_fig;
 	char				*buffer;
 	struct s_tetriminos	*next;
 }						t_tetriminos;
