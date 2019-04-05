@@ -15,7 +15,7 @@ char **createMap(int length)
 	return res;
 }
 
-void **freemap(char ** map)
+void freemap(char ** map)
 {
 	int length = ft_strlen(map[0]);
 	int i = 0;
@@ -27,9 +27,68 @@ void **freemap(char ** map)
 	free(map);
 }
 
-t_tetriminos *findFigInStr(int c, t_tetriminos **head)
+int  setFigStatus(int status, int curStatus, t_tetriminos **head)
 {
-	t_tetriminos * el = 
+	t_tetriminos * el;
+	el = *head;
+
+		while (el)
+		{
+			if (el->status == curStatus)
+				el->status = status; 
+
+			else if (curStatus != -1 && curStatus != 0 && curStatus != 1)
+			{
+				el->wasAt00 = 0;
+				el->status = status; 
+			}
+			el = el->next; 
+		}
+	
+	return status; 
+
+}
+
+
+int countStatus(int status, t_tetriminos **head)
+{
+	t_tetriminos * el;
+	el = *head;
+	int minus1 = 0;
+	int one = 0;
+	int zero = 0; 
+		
+		while (el)
+		{
+			if (el->status == -1)
+				minus1++;
+			else if (el->status == 0)
+				zero++;
+			else if (el->status == 1)
+				one++;
+			el = el->next; 
+		}
+
+		if (status == -1)
+			return minus1;
+		if (status == 0)
+			return zero;
+		else 
+			return one; 
+}
+
+t_tetriminos *findFigtoMap(t_tetriminos **head)
+{
+	t_tetriminos * el;
+	el = *head;
+		
+		while (el)
+		{
+			if (el->status == 0)
+				return el;
+			el = el->next; 
+		}
+		return 0;
 }
 
 int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
@@ -43,7 +102,7 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 	// char block2 = map	[r_0 + arr[1]]		[c_0 + arr[0]];
 	// char block3 = map	[r_0 + arr[3]]		[c_0 + arr[2]];
 	// char block4 = map	[r_0 + arr[5]]		[c_0 + arr[4]];
-
+	printf("%d %d\n %d, %d,%d,%d,%d,%d,%d,%d\n\n\n", r_0, c_0, figure->arr[0],figure->arr[1],figure->arr[2],figure->arr[3],figure->arr[4],figure->arr[5],figure->arr[6],figure->arr[7] );
 	int length = ft_strlen(map[0]) - 1;
 	if ((r_0 + figure->arr[3] <= length) && (r_0 + figure->arr[3] >= 0) && (c_0 + figure->arr[2] <= length) && (c_0 + figure->arr[2] >= 0))
 		j++;
@@ -74,16 +133,15 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 	}
 }
 
-int deMapFig(char ** map, t_tetriminos ** head, t_tetriminos * figure)
+void deMapFig(char ** map, t_tetriminos * figure)
 {
 	int i = 0;
-	int j = 0;
 	char *tmp;
 
-	while (i < ft_strlen(map[0]))
+	while (i < (int)ft_strlen(map[0]))
 	{
 		
-		while ((tmp = ft_strchr(map[i], figure->c) != NULL))
+		while (((tmp = ft_strchr(map[i], figure->c) )!= NULL))
 			*tmp = '.';
 		i++;
 	}
@@ -94,19 +152,23 @@ void mark_cur_fig_minus(t_tetriminos * figure)
 {
 	figure->status = -1;
 }
-void StatusMinusToZero(t_tetriminos ** head)
-{
-	t_tetriminos * el;
-	el = *head;
-		
-		while (el)
-		{
-			if (el->status == -1)
-				el->status = 0;
-			el = el->next; 
-		}
-}
 
+void displayMap(char ** map)
+{
+	int lenght = ft_strlen(map[0]);
+	int i = 0;
+	int j = 0;
+
+	while (i < lenght)
+	{
+		while (map[i][j])
+		{
+			write(1, &map[i][j], 1);
+			j++;
+		}
+		i++;
+	}
+}
 
 
 int WasAt00(t_tetriminos ** head)
@@ -122,10 +184,7 @@ int WasAt00(t_tetriminos ** head)
 		}
 		return 1;
 }
-// int main (void)
-// {
-// 	 
-// }
+
 
 int 	setFreeCell(int * coords, char ** map)
 {
@@ -152,11 +211,80 @@ int 	setFreeCell(int * coords, char ** map)
 	return 0;
 }
 
+void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetriminos **head, int empty_cell)
+{
+
+	//debug problem l232 when implementing l248;
+	//Descripton: we put two figures (67, 65 on map), then try to put two left figs on freedot with no success, why we have last variable  == 00 but not to the last element with 1 status????
+	
+	int status = 1; 
+	t_tetriminos * last;
+	
+	while (status)
+	{
+		setFreeCell(coords, map);
+		cur = findFigtoMap(head);
+		status = putFigOnMap(map, coords[0], coords[1], cur);
+
+		if (coords[0] == 0 && coords[1] == 0 && status == 1)
+			cur->wasAt00 = 1;
+
+		if (status)
+		{
+			last = cur;
+			setFigStatus(0, -1, head);
+		}
+
+		if (countStatus(1, head) == (*head)->qty_fig)
+			displayMap(map); 
+	}
+
+	char ** tmp; 
+	if (!status)
+	{
+		cur = findFigtoMap(head);
+	
+		if (!cur)
+		{
+			setFigStatus(0, -1, head);
+			deMapFig(map, last);
+
+			if (!cur && WasAt00(head) == 1)
+			{
+				setFigStatus(0, 3, head);
+				empty_cell++;
+				if (((empty_cell + (*head)->qty_fig) * 4) > (int)(ft_strlen(map[0]) * ft_strlen(map[0])))
+				{
+					tmp = createMap(ft_strlen(map[0]) + 1);
+					freemap(map);
+					map = tmp;
+				}
+			}
+		}
+
+		rec_putFigOnMap(map, coords, cur, head, empty_cell);
+	}
+	
+}
+
+void printStructure(t_tetriminos ** head)
+{
+		t_tetriminos * el;
+		el = *head;
+		
+		while (el)
+		{
+			//printf("status:	%d, c:	%d, wasAt00:	%d, qty_fig:	%d, curmap_length:	%d\nbuffer:	%s\n arr:	%d, %d, %d, %d,%d,%d,%d,%d\n\n\n", el->status, el->c, el->wasAt00, el->qty_fig, el->curmap_length, el->buffer, el->arr[0], el->arr[1],el->arr[2],el->arr[3],el->arr[4],el->arr[5],el->arr[6],el->arr[7] );
+			el = el->next;
+		}
+}
+
 int main(int ac, char ** av)
 {
 	int coords [2] = {0, 0};
-	t_tetriminos *head = NULL;
+	static t_tetriminos *head = NULL;
 	t_tetriminos *cur;
+	int empty_cell = 0; 
 
 	if (ac != 2)
 		return -5; // show usage
@@ -165,127 +293,9 @@ int main(int ac, char ** av)
 
 	status = readFile(av[1], &head);
 	cur = head;
-	
-	char ** map = createMap(4);
-	status = setFreeCell(coords, map);
+ 	char ** map = createMap(MinArrWidth(cur->qty_fig));
 
-	status = putFigOnMap(map, coords[0], coords[1], cur);
-	printf("%s\n", map[0]);
-	printf("%s\n", map[1]);
-	printf("%s\n", map[2]);
-	printf("%s\n", map[3]);
-	
-	
-	status = setFreeCell(coords, map);
-
-	cur = cur->next;
-	status = putFigOnMap(map, coords[0], coords[1], cur);
-
-	printf("%s\n", map[0]);
-	printf("%s\n", map[1]);
-	printf("%s\n", map[2]);
-	printf("%s\n", map[3]);
-
+	rec_putFigOnMap(map, coords, cur, &head, empty_cell);
 
 	return 0;
 }
-
-void all_markers_to_0(t_tetriminos ** head)
-{
-	t_tetriminos * el;
-	el = *head;
-		
-		while (el)
-		{
-			el->wasAt00 = 0;
-			el->status = 0;
-			el = el->next;
-		}
-}
-
-// stavim fig poka stavitsa
-// esli ne postavilas ->ischem druguyu fig poka oni ne finish; 
-// probuem drugie fig 
-// elsi vse fig pereprobovali i  oni ne stavyatsya s i-pustyh cells -> 
-
-
-// udalyaem prev figure stavim druguyu
-
-
-// esli figur net a yachejka odna pustaya -> znachit tak zhe rabotaem s i++-pustyh yacheek 
-
-void rec_putFigOnMap(map, coords[0], coords[1], cur)
-{
-	while (status)
-	{
-		setFreeCell(coords, map);
-		cur = findFigtoMap(t_tetriminos ** head);
-		status = putFigOnMap(map, coords[0], coords[1], cur);
-		if (status)
-			t_tetriminos * last = cur;
-
-		if (fig_counter == count_1())
-			display_map(); 
-		if (status)
-			all_-1_to_0();
-
-	}
-	//if (all figures - in map) - done! i vyhod s recursion; 
-	char ** tmp; 
-	if (!status)
-	{
-		cur = findFigtoMap(t_tetriminos ** head);
-		
-
-		
-
-		if (!cur)
-		{
-			StatusMinusToZero(t_tetriminos ** head)
-			deMapFig(map, head, figure);
-
-			if (!cur && WasAt00(head) == 1)
-			{
-				all_markers_to_0(head);
-				empty_cell++;
-				if (empy_cell + (*head)->qty_fig) * 4 > ft_strlen(map[0]) * ft_strlen(map[0]))
-				{
-					tmp = createMap(ft_strlen(map[0]) + 1);
-					freemap(map);
-					map = tmp;
-				}
-					
-			}
-		}
-
-
-		status = rec_putFigOnMap(map, coords[0], coords[1], cur);
-	}
-	
-}
-
-
-int fig_counter = 0;
-
-stavim fig poka stavitsa
-while (status != -1 && fig_counter != total)
-{
-	status = putFigOnMap(map, coords[0], coords[1], cur);
-	setFreeCell(coords, map);
-	cur = findFigtoMap(t_tetriminos ** head);
-	fig_counter++;
-}
-
-if (status == 0 && fig_counter != total)
-{
-	next = findFigtoMap(t_tetriminos ** head);
-	status = putFigOnMap(map, coords[0], coords[1], cur);
-	setFreeCell(coords, map);
-	cur = findFigtoMap(t_tetriminos ** head);
-	fig_counter++;
-	}
-		deMapCur
-
-}
-
-

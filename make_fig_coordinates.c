@@ -1,6 +1,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "fillit.h"
+
 // INPUT       char * "..#. ..## ...# ...."
 // OPUTUP      int * "2,0, 2,1, 3,1, 3,2"
 
@@ -48,45 +50,10 @@ int *make_fig_coordinates(char *str)
 		}
 		i++;
 	}
-	// i = 0;
-	// printf("%s\n", "Relative coordinates array\n");
-	// while (i < 8)
-	// {
-	// 	printf("%d\n", xy_arr[i]);
-	// 	i++;
-	// }
+	
 	convert_coordinates(&xy_arr);
-	// i = 0;
-	// printf("%s\n", "-------------------------\n");
-	// printf("%s\n", "Absolute coordinates array\n");
-	// while (i < 8)
-	// {
-	// 	printf("%d\n", xy_arr[i]);
-	// 	i++;
-	// }
+	
+	//printf("%d, %d,%d,%d,%d,%d,%d,%d \n", xy_arr[0], xy_arr[1], xy_arr[2], xy_arr[3], xy_arr[4], xy_arr[5], xy_arr[6], xy_arr[7]);
 	return(xy_arr);
 }
 
-
-
-// int main()
-// {
-// 	char *s1 = "..,#...#...#...#";
-// 	char *s2 = "............####";
-// 	char *s3 = ".###...#........";
-// 	char *s4 = "......##.##.....";
-// 	char *s5 = "......##.##....#";
-// 	char *s6 = "......##.##....#";
-// 	char *s7 = "#..#........#..#";
-// 	char *s8 = "##..........#..#";
-// 	make_fig_coordinates(s1);
-// 	make_fig_coordinates(s2);
-// 	make_fig_coordinates(s3);
-// 	make_fig_coordinates(s4);
-// 	make_fig_coordinates(s5);
-// 	make_fig_coordinates(s6);
-// 	make_fig_coordinates(s7);
-// 	make_fig_coordinates(s8);
-
-// 	return 0;
-// }
