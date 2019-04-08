@@ -40,6 +40,8 @@ int  setFigStatus(int status, int curStatus, t_tetriminos **head)
 			else if (curStatus != -1 && curStatus != 0 && curStatus != 1)
 			{
 				el->wasAt00 = 0;
+				el->amIlast = 0;
+
 				el->status = status; 
 			}
 			el = el->next; 
@@ -91,7 +93,58 @@ t_tetriminos *findFigtoMap(t_tetriminos **head)
 		return 0;
 }
 
-int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
+void addToStack(t_tetriminos * figure, t_tetriminos ** head)
+{
+	int i = 0;
+	while (i < 26)
+	{
+		if ((*head)->stackMappedFigs[i] == 0)
+		{
+			(*head)->stackMappedFigs[i] = figure->c;
+			return ;
+		}
+		i++;
+	}
+}
+
+t_tetriminos * popFromStack_Str(t_tetriminos ** head)
+{
+	t_tetriminos * el; 
+	t_tetriminos * prev; 
+	int i = 0;
+	int tmp = 0;
+
+	while (i < 26)
+	{
+		if ((*head)->stackMappedFigs[i] == 0)
+		{
+			if (i - 1 >= 0)
+			{
+				tmp = (*head)->stackMappedFigs[i - 1];
+				(*head)->stackMappedFigs[i - 1] = 0;
+				break ;
+			}
+		}
+		i++;
+	}
+
+	if (i == 26 && (*head)->stackMappedFigs[i - 1] != 0)
+	{
+		tmp = (*head)->stackMappedFigs[i - 1]; 
+		(*head)->stackMappedFigs[i - 1] = 0;	
+	}
+
+	el = *head;
+	while (el)
+	{
+		if (el->c == tmp)
+			return el;
+		el = el->next; 
+	}
+	return 0;
+}
+
+int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure, t_tetriminos ** head)
 {
 	int j = 0;
 			    //  0 1  2 3  4 5  6,7
@@ -124,6 +177,8 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 		map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] = figure->c;
 		map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
 		figure->status = 1;
+		addToStack(figure, head)
+
 		return 1;
 	}
 	else 
@@ -211,6 +266,37 @@ int 	setFreeCell(int * coords, char ** map)
 	return 0;
 }
 
+// void setLastMappedFig(t_tetriminos *cur, t_tetriminos **head)
+// {
+// 	t_tetriminos * el;
+// 	el = *head;
+		
+// 		while (el)
+// 		{
+// 			if (el == cur)
+// 				el->amIlast = 1;
+// 			else if (el->amIlast != 0)
+// 				el->amIlast = 0;
+// 			el = el->next;
+// 		}
+// }
+
+// t_tetriminos *LastMappedFig(t_tetriminos **head)
+// {
+// 	t_tetriminos * el;
+// 	el = *head;
+		
+// 		while (el)
+// 		{
+// 			if (el->amIlast != 0)
+// 				return el;
+// 			el = el->next;
+// 		}
+// 		return 0;
+// }
+
+
+
 void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetriminos **head, int empty_cell)
 {
 
@@ -218,20 +304,19 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 	//Descripton: we put two figures (67, 65 on map), then try to put two left figs on freedot with no success, why we have last variable  == 00 but not to the last element with 1 status????
 	
 	int status = 1; 
-	t_tetriminos * last;
 	
 	while (status)
 	{
 		setFreeCell(coords, map);
 		cur = findFigtoMap(head);
-		status = putFigOnMap(map, coords[0], coords[1], cur);
+		status = putFigOnMap(map, coords[0], coords[1], cur, head);
 
 		if (coords[0] == 0 && coords[1] == 0 && status == 1)
 			cur->wasAt00 = 1;
 
 		if (status)
 		{
-			last = cur;
+			addToStack(cur, head);
 			setFigStatus(0, -1, head);
 		}
 
@@ -247,7 +332,7 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 		if (!cur)
 		{
 			setFigStatus(0, -1, head);
-			deMapFig(map, last);
+			deMapFig(map, popFromStack_Str(head));
 
 			if (!cur && WasAt00(head) == 1)
 			{

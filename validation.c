@@ -14,6 +14,7 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	el->buffer = ft_strdup(buffer);
 	el->status = 0;
 	el->wasAt00 = 0;
+	el->amIlast = 0;
 	el->qty_fig = 0;
 	el->arr = make_fig_coordinates(el->buffer);
 
