@@ -17,7 +17,7 @@ typedef struct			s_tetriminos
 	int					c;
 	int 				*arr;
 	int 				wasAt00;
-	int 				stackMappedFigs[26];
+	int 				*stackMappedFigs;
 	int 				qty_fig;
 	int 				curmap_length;
 	char				*buffer;

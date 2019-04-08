@@ -40,7 +40,6 @@ int  setFigStatus(int status, int curStatus, t_tetriminos **head)
 			else if (curStatus != -1 && curStatus != 0 && curStatus != 1)
 			{
 				el->wasAt00 = 0;
-				el->amIlast = 0;
 
 				el->status = status; 
 			}
@@ -110,7 +109,6 @@ void addToStack(t_tetriminos * figure, t_tetriminos ** head)
 t_tetriminos * popFromStack_Str(t_tetriminos ** head)
 {
 	t_tetriminos * el; 
-	t_tetriminos * prev; 
 	int i = 0;
 	int tmp = 0;
 
@@ -144,11 +142,20 @@ t_tetriminos * popFromStack_Str(t_tetriminos ** head)
 	return 0;
 }
 
-int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure, t_tetriminos ** head)
+int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 {
+	if (figure->wasAt00 == 1 && r_0 == 0 && c_0 == 0)
+	{
+		figure->status = -1;
+		return -1;
+	}
+
+
+	
+
 	int j = 0;
 			    //  0 1  2 3  4 5  6,7
-	//int arr[8] = {0,0, 1,0, 1,1, 2,1};
+	//int arr[8] = {0,0, 0,1, 0,2, 0,3};
 	// x - column
 	// y - row; 
 	// 						row 				column
@@ -163,12 +170,15 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure, t_tetrimin
 		j++;
 	if ((r_0 + figure->arr[7] <= length) && (r_0 + figure->arr[7] >= 0) && (c_0 + figure->arr[6] <= length) && (c_0 + figure->arr[6] >= 0))
 		j++;
-	if (map[r_0 + figure->arr[3]][c_0 + figure->arr[2]] == '.')
-		j++;
-	if (map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] == '.')
-		j++;
-	if (map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] == '.')
-		j++;
+	if (j == 3)
+	{
+		if (map[r_0 + figure->arr[3]][c_0 + figure->arr[2]] == '.')
+			j++;
+		if (map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] == '.')
+			j++;
+		if (map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] == '.')
+			j++;
+	}
 
 	if (j == 6)
 	{
@@ -177,12 +187,17 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure, t_tetrimin
 		map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] = figure->c;
 		map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
 		figure->status = 1;
-		addToStack(figure, head)
 
 		return 1;
 	}
 	else 
 	{
+		if (figure->wasAt00 == 0 && r_0 == 0 && c_0 == 0)
+		{
+			figure->wasAt00 = 1;
+			return 0;
+		}
+
 		figure->status = -1;
 		return 0; 
 	}
@@ -248,6 +263,7 @@ int 	setFreeCell(int * coords, char ** map)
 	int length = ft_strlen(map[0]);
 	while (i < length)
 	{
+		j = 0;
 		while (map[i][j] != '\0' && map[i][j] != '.')
 		{
 			j++;
@@ -309,12 +325,12 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 	{
 		setFreeCell(coords, map);
 		cur = findFigtoMap(head);
-		status = putFigOnMap(map, coords[0], coords[1], cur, head);
+		status = putFigOnMap(map, coords[0], coords[1], cur);
 
 		if (coords[0] == 0 && coords[1] == 0 && status == 1)
 			cur->wasAt00 = 1;
 
-		if (status)
+		if (status > 0)
 		{
 			addToStack(cur, head);
 			setFigStatus(0, -1, head);
@@ -381,6 +397,6 @@ int main(int ac, char ** av)
  	char ** map = createMap(MinArrWidth(cur->qty_fig));
 
 	rec_putFigOnMap(map, coords, cur, &head, empty_cell);
-
+ 
 	return 0;
 }

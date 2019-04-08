@@ -10,11 +10,11 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 		return (0);
 	if (!head)
 		return (0);
+	
 	el->c = i + 65;
 	el->buffer = ft_strdup(buffer);
 	el->status = 0;
 	el->wasAt00 = 0;
-	el->amIlast = 0;
 	el->qty_fig = 0;
 	el->arr = make_fig_coordinates(el->buffer);
 
@@ -52,6 +52,9 @@ int cleanup(t_tetriminos ** head)
 {
 	t_tetriminos * el;
 	el = *head;
+
+	// to delete int arr 
+
 	if (el)
 	{
 		if (el->next)
@@ -175,6 +178,28 @@ int MinArrWidth(int qtyFig)
 	return i;
 }
 
+	void createStackMappedFigs(t_tetriminos **head)
+	{
+		t_tetriminos * el;
+		el = *head;
+		int j;
+
+		while (el)
+		{
+			j = 0;
+			el->stackMappedFigs = (int *)malloc(sizeof(int) * 26);
+			if ((!el->stackMappedFigs))
+				return ;
+			
+			while (j < 26)
+			{
+				el->stackMappedFigs[j] = 0;
+				j++;
+			}
+			el = el->next; 
+		}
+	}
+
 int readFile(char * av, t_tetriminos **head)
 {
 	int i = 0;
@@ -221,6 +246,7 @@ int readFile(char * av, t_tetriminos **head)
 		if (readsize == 0)
 		{		
 			setQtyFig(i, head);
+			createStackMappedFigs(head);
 			return 5;
 		}
 		else if (buffer[0] != '\n' || readsize < 0)
