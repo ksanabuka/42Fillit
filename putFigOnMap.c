@@ -150,7 +150,7 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 		return -1;
 	}
 
-
+	
 	
 
 	int j = 0;
@@ -188,10 +188,16 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 		map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
 		figure->status = 1;
 
+		if (r_0 == 0 && c_0 == 0)
+			figure->wasAt00 = 1;
+
 		return 1;
 	}
 	else 
 	{
+
+		
+
 		if (figure->wasAt00 == 0 && r_0 == 0 && c_0 == 0)
 		{
 			figure->wasAt00 = 1;
@@ -255,6 +261,19 @@ int WasAt00(t_tetriminos ** head)
 		return 1;
 }
 
+int checkAllStatus(t_tetriminos ** head, int status)
+{
+	t_tetriminos * el;
+	el = *head;
+		
+		while (el)
+		{
+			if (el->status != status)
+				return 0;
+			el = el->next;
+		}
+		return 1;
+}
 
 int 	setFreeCell(int * coords, char ** map)
 {
@@ -315,20 +334,22 @@ int 	setFreeCell(int * coords, char ** map)
 
 void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetriminos **head, int empty_cell)
 {
+	int g = 0;
+	while (map[g])
+		printf("%s\n", map[g++]);
 
 	//debug problem l232 when implementing l248;
 	//Descripton: we put two figures (67, 65 on map), then try to put two left figs on freedot with no success, why we have last variable  == 00 but not to the last element with 1 status????
 	
 	int status = 1; 
 	
-	while (status)
+	while (status == 1)
 	{
 		setFreeCell(coords, map);
 		cur = findFigtoMap(head);
 		status = putFigOnMap(map, coords[0], coords[1], cur);
 
-		if (coords[0] == 0 && coords[1] == 0 && status == 1)
-			cur->wasAt00 = 1;
+		
 
 		if (status > 0)
 		{
@@ -341,7 +362,7 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 	}
 
 	char ** tmp; 
-	if (!status)
+	if (status <= 0)
 	{
 		cur = findFigtoMap(head);
 	
@@ -350,13 +371,16 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 			setFigStatus(0, -1, head);
 			deMapFig(map, popFromStack_Str(head));
 
-			if (!cur && WasAt00(head) == 1)
+			if (!cur && WasAt00(head) == 1 && checkAllStatus(head, -1))
 			{
 				setFigStatus(0, 3, head);
 				empty_cell++;
 				if (((empty_cell + (*head)->qty_fig) * 4) > (int)(ft_strlen(map[0]) * ft_strlen(map[0])))
 				{
 					tmp = createMap(ft_strlen(map[0]) + 1);
+					popFromStack_Str(head);
+
+					empty_cell = 0; 
 					freemap(map);
 					map = tmp;
 				}
