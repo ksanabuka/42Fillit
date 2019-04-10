@@ -85,7 +85,7 @@ t_tetriminos *findFigtoMap(t_tetriminos **head)
 		
 		while (el)
 		{
-			if (el->status == 0)
+			if (el->status == 0 && !isMapped(head, el))
 				return el;
 			el = el->next; 
 		}
@@ -142,18 +142,12 @@ t_tetriminos * popFromStack_Str(t_tetriminos ** head)
 	return 0;
 }
 
-int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
+int putFigOnMap(char ** map, int * coords, t_tetriminos * figure, t_tetriminos ** head)
 {
-	if (figure->wasAt00 == 1 && r_0 == 0 && c_0 == 0)
-	{
-		figure->status = -1;
-		return -1;
-	}
-
-	
-	
-
 	int j = 0;
+	int r_0 = coords[0];
+	int c_0 = coords[1];
+
 			    //  0 1  2 3  4 5  6,7
 	//int arr[8] = {0,0, 0,1, 0,2, 0,3};
 	// x - column
@@ -162,7 +156,7 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 	// char block2 = map	[r_0 + arr[1]]		[c_0 + arr[0]];
 	// char block3 = map	[r_0 + arr[3]]		[c_0 + arr[2]];
 	// char block4 = map	[r_0 + arr[5]]		[c_0 + arr[4]];
-	printf("%d %d\n %d, %d,%d,%d,%d,%d,%d,%d\n\n\n", r_0, c_0, figure->arr[0],figure->arr[1],figure->arr[2],figure->arr[3],figure->arr[4],figure->arr[5],figure->arr[6],figure->arr[7] );
+	//printf("%d %d\n %d, %d,%d,%d,%d,%d,%d,%d\n\n\n", r_0, c_0, figure->arr[0],figure->arr[1],figure->arr[2],figure->arr[3],figure->arr[4],figure->arr[5],figure->arr[6],figure->arr[7] );
 	int length = ft_strlen(map[0]) - 1;
 	if ((r_0 + figure->arr[3] <= length) && (r_0 + figure->arr[3] >= 0) && (c_0 + figure->arr[2] <= length) && (c_0 + figure->arr[2] >= 0))
 		j++;
@@ -188,22 +182,17 @@ int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure)
 		map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
 		figure->status = 1;
 
-		if (r_0 == 0 && c_0 == 0)
-			figure->wasAt00 = 1;
-
+		addFigToSS(head, figure, (*head)->level);
 		return 1;
 	}
 	else 
 	{
-
-		
-
-		if (figure->wasAt00 == 0 && r_0 == 0 && c_0 == 0)
+		if (r_0 == 0 && c_0 == 0)
 		{
-			figure->wasAt00 = 1;
+			addFigToSS_Beg00(head, figure);
 			return 0;
 		}
-
+		addFigToSS(head, figure, (*head)->level);
 		figure->status = -1;
 		return 0; 
 	}
@@ -337,9 +326,6 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 	int g = 0;
 	while (map[g])
 		printf("%s\n", map[g++]);
-
-	//debug problem l232 when implementing l248;
-	//Descripton: we put two figures (67, 65 on map), then try to put two left figs on freedot with no success, why we have last variable  == 00 but not to the last element with 1 status????
 	
 	int status = 1; 
 	
@@ -347,7 +333,7 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 	{
 		setFreeCell(coords, map);
 		cur = findFigtoMap(head);
-		status = putFigOnMap(map, coords[0], coords[1], cur);
+		status = putFigOnMap(map, coords, cur);
 
 		
 
@@ -355,6 +341,7 @@ void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetrimino
 		{
 			addToStack(cur, head);
 			setFigStatus(0, -1, head);
+			(*head)->level++;
 		}
 
 		if (countStatus(1, head) == (*head)->qty_fig)

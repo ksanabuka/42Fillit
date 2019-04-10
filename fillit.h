@@ -14,9 +14,11 @@
 typedef struct			s_tetriminos
 {
 	int 				status;
+	int					level;
 	int					c;
 	int 				*arr;
-	int 				wasAt00;
+	int 				wasAt00; // delete 
+	char 				**stackStatus;
 	int 				*stackMappedFigs;
 	int 				empty_cell; 
 	int 				qty_fig;

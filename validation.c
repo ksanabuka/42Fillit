@@ -11,7 +11,10 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	if (!head)
 		return (0);
 	
+	createStackStatus(head);
+
 	el->c = i + 65;
+	el->level = 0;
 	el->buffer = ft_strdup(buffer);
 	el->status = 0;
 	el->wasAt00 = 0;
