@@ -15,6 +15,16 @@ char **createMap(int length)
 	return res;
 }
 
+char **resizeMap(char *** map, t_tetriminos **head)
+{
+	char ** tmp;
+	tmp = createMap((*head)->curmap_length);
+	freemap(*map);
+	*map = tmp;
+	return *map;
+}
+
+
 void freemap(char ** map)
 {
 	int length = ft_strlen(map[0]);
@@ -85,7 +95,7 @@ t_tetriminos *findFigtoMap(t_tetriminos **head)
 		
 		while (el)
 		{
-			if (el->status == 0 && !isMapped(head, el))
+			if (!isMapped(head, el))
 				return el;
 			el = el->next; 
 		}
@@ -209,9 +219,7 @@ void deMapFig(char ** map, t_tetriminos * figure)
 		while (((tmp = ft_strchr(map[i], figure->c) )!= NULL))
 			*tmp = '.';
 		i++;
-	}
-	figure->status = -1;
-	
+	}	
 }
 void mark_cur_fig_minus(t_tetriminos * figure)
 {
@@ -320,65 +328,6 @@ int 	setFreeCell(int * coords, char ** map)
 // }
 
 
-
-void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetriminos **head, int empty_cell)
-{
-	int g = 0;
-	while (map[g])
-		printf("%s\n", map[g++]);
-	
-	int status = 1; 
-	
-	while (status == 1)
-	{
-		setFreeCell(coords, map);
-		cur = findFigtoMap(head);
-		status = putFigOnMap(map, coords, cur);
-
-		
-
-		if (status > 0)
-		{
-			addToStack(cur, head);
-			setFigStatus(0, -1, head);
-			(*head)->level++;
-		}
-
-		if (countStatus(1, head) == (*head)->qty_fig)
-			displayMap(map); 
-	}
-
-	char ** tmp; 
-	if (status <= 0)
-	{
-		cur = findFigtoMap(head);
-	
-		if (!cur)
-		{
-			setFigStatus(0, -1, head);
-			deMapFig(map, popFromStack_Str(head));
-
-			if (!cur && WasAt00(head) == 1 && checkAllStatus(head, -1))
-			{
-				setFigStatus(0, 3, head);
-				empty_cell++;
-				if (((empty_cell + (*head)->qty_fig) * 4) > (int)(ft_strlen(map[0]) * ft_strlen(map[0])))
-				{
-					tmp = createMap(ft_strlen(map[0]) + 1);
-					popFromStack_Str(head);
-
-					empty_cell = 0; 
-					freemap(map);
-					map = tmp;
-				}
-			}
-		}
-
-		rec_putFigOnMap(map, coords, cur, head, empty_cell);
-	}
-	
-}
-
 void printStructure(t_tetriminos ** head)
 {
 		t_tetriminos * el;
@@ -391,23 +340,3 @@ void printStructure(t_tetriminos ** head)
 		}
 }
 
-int main(int ac, char ** av)
-{
-	int coords [2] = {0, 0};
-	static t_tetriminos *head = NULL;
-	t_tetriminos *cur;
-	int empty_cell = 0; 
-
-	if (ac != 2)
-		return -5; // show usage
-
-	int status;
-
-	status = readFile(av[1], &head);
-	cur = head;
- 	char ** map = createMap(MinArrWidth(cur->qty_fig));
-
-	rec_putFigOnMap(map, coords, cur, &head, empty_cell);
- 
-	return 0;
-}

@@ -28,6 +28,7 @@ typedef struct			s_tetriminos
 }						t_tetriminos;
 
 
+char **resizeMap(char *** map, t_tetriminos **head);
 int readFile(char * av, t_tetriminos **head);
 int *make_fig_coordinates(char *str);
 void convert_coordinates(int **arr);
@@ -37,20 +38,28 @@ int cleanup(t_tetriminos ** head);
 void deletenl(char *str);
 int validateFigureByConnections(char *s);
 int validate_figure_by_chars(char *s);
-int MinArrWidth(int qtyFig);
+int minArrWidth(int qtyFig);
 int readFile(char * av, t_tetriminos **head);
 char **createMap(int length);
 void freemap(char ** map);
 int  setFigStatus(int status, int curStatus, t_tetriminos **head);
 int countStatus(int status, t_tetriminos **head);
 t_tetriminos *findFigtoMap(t_tetriminos **head);
-int putFigOnMap(char ** map, int r_0, int c_0, t_tetriminos * figure);
+int putFigOnMap(char ** map, int * coords, t_tetriminos * figure, t_tetriminos ** head);
 void deMapFig(char ** map, t_tetriminos * figure);
 void mark_cur_fig_minus(t_tetriminos * figure);
 void displayMap(char ** map);
 int WasAt00(t_tetriminos ** head);
-int 	setFreeCell(int * coords, char ** map);
-void rec_putFigOnMap(char ** map, int coords [2], t_tetriminos *cur, t_tetriminos **head, int empty_cell);
+int setFreeCell(int * coords, char ** map);
+void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos **head);
+
+
+void createStackStatus(t_tetriminos **head);
+void addFigToSS(t_tetriminos ** head, t_tetriminos * figure, int level);
+void addFigToSS_Beg00(t_tetriminos ** head, t_tetriminos * figure);
+void delLastLevelFromSS(t_tetriminos ** head);
+int isMapped(t_tetriminos ** head, t_tetriminos * figure);
+t_tetriminos * findLastMappedFig(t_tetriminos ** head);
 
 
 

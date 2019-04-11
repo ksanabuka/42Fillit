@@ -11,16 +11,18 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	if (!head)
 		return (0);
 	
-	createStackStatus(head);
-
+	
+	el->stackStatus = NULL; 
 	el->c = i + 65;
 	el->level = 0;
 	el->buffer = ft_strdup(buffer);
 	el->status = 0;
+	el->empty_cell = 0; 
 	el->wasAt00 = 0;
 	el->qty_fig = 0;
 	el->arr = make_fig_coordinates(el->buffer);
 
+	
 	if (!el->buffer)
 	{
 		free(el);
@@ -157,7 +159,7 @@ int validate_figure_by_chars(char *s)
 		return (1);
 }
 
-int MinArrWidth(int qtyFig)
+int minArrWidth(int qtyFig)
 {
 	int arr [11] = {1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121};
 	int sq = qtyFig * 4;
@@ -218,9 +220,12 @@ int readFile(char * av, t_tetriminos **head)
 
 	fd = open(av, O_RDONLY);
 
+	int tmp = 0;
+
 	while (i <= 27)
 	{
 		readsize = read(fd, buffer, 20);
+		tmp = validate_figure_by_chars(buffer);
 		if (readsize != 20 || !validate_figure_by_chars(buffer))
 		{	
 			status = cleanup(head);
@@ -247,9 +252,13 @@ int readFile(char * av, t_tetriminos **head)
 		buffer[0] = '\0';
 		readsize = read(fd, buffer, 1);		
 		if (readsize == 0)
-		{		
+		{	
+			createStackStatus(head);	
 			setQtyFig(i, head);
 			createStackMappedFigs(head);
+			(*head)->curmap_length = minArrWidth((*head)->qty_fig);
+
+
 			return 5;
 		}
 		else if (buffer[0] != '\n' || readsize < 0)

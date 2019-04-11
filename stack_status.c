@@ -16,6 +16,7 @@ void createStackStatus(t_tetriminos **head)
 	(*head)->stackStatus[26] = NULL;
 }
 
+
 void addFigToSS(t_tetriminos ** head, t_tetriminos * figure, int level)
 {
 	int i = 0;
@@ -32,8 +33,6 @@ void addFigToSS(t_tetriminos ** head, t_tetriminos * figure, int level)
 
 void addFigToSS_Beg00(t_tetriminos ** head, t_tetriminos * figure)
 {
-	int i = 0;
-	
 	char *tmp = ft_strdup((*head)->stackStatus[0]);
 	(*head)->stackStatus[0][0] = figure->c;
 	(*head)->stackStatus[0][1] = '\0';
@@ -41,13 +40,17 @@ void addFigToSS_Beg00(t_tetriminos ** head, t_tetriminos * figure)
 	free(tmp);	
 }
 
-void delLastLevelFromSS(t_tetriminos ** head, int level)
+void delLastLevelFromSS(t_tetriminos ** head)
 {
 	int j = 0; 
-	while ((*head)->stackStatus[level][j] != '\0')
+	while ((*head)->stackStatus[(*head)->level][j] != '\0')
 	{
-		(*head)->stackStatus[level][j] = '\0';
 		j++;
+	}
+
+	while(j >= 0)
+	{
+		(*head)->stackStatus[(*head)->level][--j] = '\0';
 	}
 }
 
@@ -56,9 +59,8 @@ int isMapped(t_tetriminos ** head, t_tetriminos * figure)
 
 	int i = 0; 
 	int j;
-	int c = 0;
 
-	while (i <= (*head)->level);
+	while (i < (*head)->level)
 	{
 		j = 0;
 		while ((*head)->stackStatus[i][j] != '\0')
@@ -67,6 +69,40 @@ int isMapped(t_tetriminos ** head, t_tetriminos * figure)
 			return 1; 
 		i++;
 	}
+
+	j = 0;
+	if (i == (*head)->level)
+
+		while ((*head)->stackStatus[i][j] != '\0')
+		{
+			if ((*head)->stackStatus[i][j] == figure->c)
+				return 1;
+			else 
+				j++;
+		}	
 	return 0;
 }
+
+t_tetriminos * findLastMappedFig(t_tetriminos ** head)
+{
+	int j = 0;
+	int letter; 
+	while ((*head)->stackStatus[(*head)->level][j] != '\0')
+		j++;
+
+	if (((*head)->stackStatus[(*head)->level][j] == '\0') && j > 0)
+		letter = (*head)->stackStatus[(*head)->level][j - 1];
+
+	t_tetriminos * el;
+	el = *head;
+		
+		while (el)
+		{
+			if (el->c == letter)
+				return el;
+			el = el->next; 
+		}
+		return 0;
+}
+
 
