@@ -54,6 +54,13 @@ void delLastLevelFromSS(t_tetriminos ** head)
 	}
 }
 
+void setEmptyCell(int *coords, char **map)
+{
+	map[coords[0]][coords[1]] ='*';
+}			
+
+
+
 int isMapped(t_tetriminos ** head, t_tetriminos * figure)
 {
 
@@ -105,4 +112,26 @@ t_tetriminos * findLastMappedFig(t_tetriminos ** head)
 		return 0;
 }
 
+
+int qtyEatenEmptyCoords(int *curcoords, int *stack)
+{
+	int res;
+	int i;
+
+	res =0;
+	i = 0;
+
+	while (i <= 149)
+	{
+		if ((stack[i] != -5) && (stack[i + 1] != -5))
+		{
+			if ((curcoords[0] <= stack[i]) && (curcoords[1] < stack[i + 1]))
+				res++;
+			else if (curcoords[0] < stack[i])
+				res++;
+		}
+		i += 2;
+	}
+	return res;
+}
 

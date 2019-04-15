@@ -19,8 +19,10 @@ typedef struct			s_tetriminos
 	int 				*arr;
 	int 				wasAt00; // delete 
 	char 				**stackStatus;
+	int 				*stack_empty_coord;
 	int 				*stackMappedFigs;
 	int 				empty_cell; 
+	int 				used_empty_cell;
 	int 				qty_fig;
 	int 				curmap_length;
 	char				*buffer;
@@ -53,13 +55,17 @@ int WasAt00(t_tetriminos ** head);
 int setFreeCell(int * coords, char ** map);
 void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos **head);
 
-
+void deleteEatenEmptyCoordsFromStack(t_tetriminos ** head, int qty);
+int qtyEatenEmptyCoords(int *curcoords, int *stack);
 void createStackStatus(t_tetriminos **head);
 void addFigToSS(t_tetriminos ** head, t_tetriminos * figure, int level);
 void addFigToSS_Beg00(t_tetriminos ** head, t_tetriminos * figure);
 void delLastLevelFromSS(t_tetriminos ** head);
 int isMapped(t_tetriminos ** head, t_tetriminos * figure);
 t_tetriminos * findLastMappedFig(t_tetriminos ** head);
+void setEmptyCell(int *coords, char **map);
+void addCoordToStack(int *coords, t_tetriminos **head);
+void toZeroStackCoord(t_tetriminos **head);
 
 
 

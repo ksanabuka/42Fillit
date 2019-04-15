@@ -18,11 +18,11 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	el->buffer = ft_strdup(buffer);
 	el->status = 0;
 	el->empty_cell = 0; 
+	el->used_empty_cell = 0; 
 	el->wasAt00 = 0;
 	el->qty_fig = 0;
 	el->arr = make_fig_coordinates(el->buffer);
 
-	
 	if (!el->buffer)
 	{
 		free(el);
@@ -49,6 +49,23 @@ void setQtyFig(int i, t_tetriminos ** head)
 	{
 		el->qty_fig = i;
 		el = el->next;
+	}
+}
+
+void deleteEatenEmptyCoordsFromStack(t_tetriminos ** head, int qty)
+{
+	int i = 0;
+	while ((*head)->stack_empty_coord[i] != -5 && i < 150)
+		i++;
+	if ((*head)->stack_empty_coord[i] == -5 && i < 150)
+	{
+		i--;
+		while (qty-- && i >= 0)
+		{
+			(*head)->stack_empty_coord[i] = -5;
+			(*head)->stack_empty_coord[i - 1] = -5;
+			i--;
+		}
 	}
 }
 
@@ -205,6 +222,59 @@ int minArrWidth(int qtyFig)
 		}
 	}
 
+int checkAllOPtionsTried(t_tetriminos **head)
+{
+	int counter = 0;
+	int i = (*head)->level;
+	while ((*head)->stackStatus[i][counter] != '\0')
+	{	
+		counter++; 
+	}	
+	
+	if (i + (*head)->level == (*head)->qty_fig)
+		return 1;
+	else 
+		return 0;
+
+}
+
+void addCoordToStack(int *coords, t_tetriminos **head)
+{
+	int i = 0;
+	while (i < 150 && (*head)->stack_empty_coord[i] != -5)
+		i++;
+
+	if (i < 150 && (*head)->stack_empty_coord[i] == -5)
+		{
+			(*head)->stack_empty_coord[i] = coords[0];
+			(*head)->stack_empty_coord[i + 1] = coords[1];
+		}
+}
+
+void toZeroStackCoord(t_tetriminos **head)
+{
+	int i = 0;
+	while (i < 150)
+	{
+		(*head)->stack_empty_coord[i] = -5;
+		i++;
+	}
+}
+
+
+void createStack_empty_coord(t_tetriminos **head)
+{
+	(*head)->stack_empty_coord = (int*)malloc(sizeof(int) * 150);
+	if (!(*head)->stack_empty_coord)
+		return ; 
+	int i = 0;
+	while (i < 150)
+	{
+		(*head)->stack_empty_coord[i] = -5;
+		i++;
+	}
+}
+
 int readFile(char * av, t_tetriminos **head)
 {
 	int i = 0;
@@ -257,6 +327,8 @@ int readFile(char * av, t_tetriminos **head)
 			setQtyFig(i, head);
 			createStackMappedFigs(head);
 			(*head)->curmap_length = minArrWidth((*head)->qty_fig);
+			(*head)->curmap_length = minArrWidth((*head)->qty_fig);
+			createStack_empty_coord(head);
 
 
 			return 5;
