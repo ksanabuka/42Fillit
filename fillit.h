@@ -54,7 +54,6 @@ void displayMap(char ** map);
 int WasAt00(t_tetriminos ** head);
 int setFreeCell(int * coords, char ** map);
 void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos **head);
-
 void deleteEatenEmptyCoordsFromStack(t_tetriminos ** head, int qty);
 int qtyEatenEmptyCoords(int *curcoords, int *stack);
 void createStackStatus(t_tetriminos **head);
@@ -66,6 +65,9 @@ t_tetriminos * findLastMappedFig(t_tetriminos ** head);
 void setEmptyCell(int *coords, char **map);
 void addCoordToStack(int *coords, t_tetriminos **head);
 void toZeroStackCoord(t_tetriminos **head);
+int checkAllOPtionsTried(t_tetriminos **head);
+void deleteEatenEmptyCoordsFromMap(t_tetriminos **head, int qty, char ** map);
+void toZeroMap(t_tetriminos **head, char ** map);
 
 
 

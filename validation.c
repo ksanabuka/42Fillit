@@ -221,17 +221,63 @@ int minArrWidth(int qtyFig)
 			el = el->next; 
 		}
 	}
+void deleteEatenEmptyCoordsFromMap(t_tetriminos **head, int qty, char ** map)
+{
+	if (qty == 0)
+		return ;
+	int r;
+	int c; 
+	int i = 0;
+	while ((*head)->stack_empty_coord[i] != -5 && i < 150)
+		i++;
+	if ((*head)->stack_empty_coord[i] == -5 && i < 150)
+	{
+		i--;
+		while (qty-- && i >= 0)
+		{
+			c = (*head)->stack_empty_coord[i];
+			r = (*head)->stack_empty_coord[i - 1];
+			map[r][c] = '.';
+			i =-2;
+		}
+	}
+}
+
+void toZeroMap(t_tetriminos **head, char ** map)
+{
+	int i = 0;
+	int j = 0;
+	while (i < (*head)->curmap_length)
+	{
+		while (map[i][j] != '\0')
+		{
+			map[i][j] = '.';
+			j++;
+		}
+		i++;
+	}
+}
 
 int checkAllOPtionsTried(t_tetriminos **head)
 {
-	int counter = 0;
-	int i = (*head)->level;
-	while ((*head)->stackStatus[i][counter] != '\0')
-	{	
-		counter++; 
-	}	
-	
-	if (i + (*head)->level == (*head)->qty_fig)
+	if ((*head)->level != (*head)->qty_fig - 1)
+		return 0;
+	int i = 0;
+	int j = (*head)->qty_fig;
+	int len;
+
+	while (i <= (*head)->level)
+	{
+		len = ft_strlen((*head)->stackStatus[i]);
+		if (len == j)
+		{
+			i++;
+			j--;
+		}
+		else 
+			return 0;
+	}
+	if (i - 1 == (*head)->level)
 		return 1;
 	else 
 		return 0;
