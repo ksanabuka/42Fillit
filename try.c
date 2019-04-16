@@ -39,6 +39,7 @@ void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos *
 	
 	if ((*head)->level == (*head)->qty_fig)
 	{
+		
 		displayMap(map); 
 		exit(0);
 

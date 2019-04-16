@@ -64,7 +64,7 @@ void deleteEatenEmptyCoordsFromStack(t_tetriminos ** head, int qty)
 		{
 			(*head)->stack_empty_coord[i] = -5;
 			(*head)->stack_empty_coord[i - 1] = -5;
-			i--;
+			i -= 2;
 		}
 	}
 }
@@ -238,7 +238,7 @@ void deleteEatenEmptyCoordsFromMap(t_tetriminos **head, int qty, char ** map)
 			c = (*head)->stack_empty_coord[i];
 			r = (*head)->stack_empty_coord[i - 1];
 			map[r][c] = '.';
-			i =-2;
+			i = i - 2;
 		}
 	}
 }

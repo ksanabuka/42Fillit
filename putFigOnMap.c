@@ -15,6 +15,8 @@ char **createMap(int length)
 	return res;
 }
 
+
+
 char **resizeMap(char *** map, t_tetriminos **head)
 {
 	char ** tmp;
