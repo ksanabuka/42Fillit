@@ -22,23 +22,36 @@ t_tetriminos * add_tetrimonos(char *buffer, t_tetriminos **head, int i)
 	el->wasAt00 = 0;
 	el->qty_fig = 0;
 	el->arr = make_fig_coordinates(el->buffer);
+	el->next = NULL;
 
 	if (!el->buffer)
 	{
 		free(el);
 		return (0);
 	}
+	
+	t_tetriminos * tmp;
+
 	if (!*head)
 	{
-		el->next = NULL;
+		(*head) = el;
 	}
+	
 	else
 	{
-		el->next = *head;
+		tmp = (*head);
+
+		while (tmp->next != NULL)
+		{
+			tmp = tmp->next;
+		}
+		tmp->next = el;
 	}
-	*head = el;
+
+
 	return (el);
 }
+
 
 void setQtyFig(int i, t_tetriminos ** head)
 {
@@ -260,27 +273,31 @@ void toZeroMap(t_tetriminos **head, char ** map)
 
 int checkAllOPtionsTried(t_tetriminos **head)
 {
-	if ((*head)->level != (*head)->qty_fig - 1)
-		return 0;
-	int i = 0;
-	int j = (*head)->qty_fig;
-	int len;
-
-	while (i <= (*head)->level)
-	{
-		len = ft_strlen((*head)->stackStatus[i]);
-		if (len == j)
-		{
-			i++;
-			j--;
-		}
-		else 
-			return 0;
-	}
-	if (i - 1 == (*head)->level)
+	if (((*head)->level == 0) && ((int)ft_strlen((*head)->stackStatus[0]) == (*head)->qty_fig))
 		return 1;
 	else 
-		return 0;
+		return 0; 
+	// if ((*head)->level != (*head)->qty_fig - 1)
+	// 	return 0;
+	// int i = 0;
+	// int j = (*head)->qty_fig;
+	// int len;
+
+	// while (i <= (*head)->level)
+	// {
+	// 	len = ft_strlen((*head)->stackStatus[i]);
+	// 	if (len == j)
+	// 	{
+	// 		i++;
+	// 		j--;
+	// 	}
+	// 	else 
+	// 		return 0;
+	// }
+	// if (i - 1 == (*head)->level)
+	// 	return 1;
+	// else 
+	// 	return 0;
 
 }
 
@@ -373,9 +390,14 @@ int readFile(char * av, t_tetriminos **head)
 			setQtyFig(i, head);
 			createStackMappedFigs(head);
 			(*head)->curmap_length = minArrWidth((*head)->qty_fig);
-			(*head)->curmap_length = minArrWidth((*head)->qty_fig);
 			createStack_empty_coord(head);
-
+			
+			// el = (*head); 
+			// while (el)
+			// 	{
+			// 		printf("%d\n", (el)->c);
+			// 		el = (el)->next;
+			// 	}	
 
 			return 5;
 		}

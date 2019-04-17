@@ -51,27 +51,32 @@ void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos *
 		cur = findFigtoMap(head);
 	
 
+		if (!cur && (*head)->level == 0 && (*head)->stackStatus[0][(*head)->qty_fig - 1] != '\0' && (*head)->used_empty_cell == (*head)->empty_cell)
+			{
+				(*head)->empty_cell++;
+				(*head)->used_empty_cell = 0;
+				toZeroMap(head, map);
+				toZeroStackCoord(head);
+				delLastLevelFromSS(head);
 
-		if (!cur && (*head)->used_empty_cell == 0 &&  (*head)->empty_cell == 0 && checkAllOPtionsTried(head) == 1)
-		{
-			(*head)->empty_cell++;
-			setFreeCell(coords, map);
-			setEmptyCell(coords, map);
-		 	addCoordToStack(coords, head);
-			(*head)->used_empty_cell++;
-			delLastLevelFromSS(head);
-		}
+			if ((((*head)->empty_cell + (*head)->qty_fig * 4) > (*head)->curmap_length * (*head)->curmap_length))
+				{
+					(*head)->empty_cell = 0;
+					(*head)->used_empty_cell = 0;
+					(*head)->curmap_length = (*head)->curmap_length + 1;
+					resizeMap(&map, head);
+				}
+			}
 
 
 		 else if (!cur && (*head)->empty_cell > 0 && (*head)->used_empty_cell < (*head)->empty_cell)
 		{
 			delLastLevelFromSS(head);
-			setFreeCell(coords, map);
 
+			setFreeCell(coords, map);
 			setEmptyCell(coords, map);
 		 	addCoordToStack(coords, head);
 			(*head)->used_empty_cell++;
-
 		}
 
 		else if (!cur && (*head)->used_empty_cell == (*head)->empty_cell)
@@ -84,28 +89,6 @@ void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos *
 			deleteEatenEmptyCoordsFromMap(head, qty, map);
 			deleteEatenEmptyCoordsFromStack(head, qty);
 			(*head)->used_empty_cell = (*head)->used_empty_cell - qty;
-
-			if ((*head)->level == 0 && (*head)->stackStatus[0][(*head)->qty_fig - 1] != '\0')
-	//		if ((*head)->level == 0 && (*head)->stackStatus[0][(*head)->qty_fig - 1] != '\0' && (*head)->used_empty_cell + 1 == (*head)->empty_cell)
-			{
-				(*head)->empty_cell++;
-				(*head)->used_empty_cell = 0;
-				toZeroMap(head, map);
-				toZeroStackCoord(head);
-				delLastLevelFromSS(head);
-
-			}
-			
-			if ((((*head)->empty_cell + (*head)->qty_fig * 4) > (*head)->curmap_length * (*head)->curmap_length))
-				{
-					(*head)->empty_cell = 0;
-					(*head)->used_empty_cell = 0;
-					toZeroStackCoord(head);
-					(*head)->curmap_length = (*head)->curmap_length + 1;
-					resizeMap(&map, head);
-					delLastLevelFromSS(head);
-				}
-
 		}
 
 		rec_putFigOnMap(map, coords, cur, head);
