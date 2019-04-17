@@ -72,7 +72,6 @@ void rec_putFigOnMap(char ** map, int *coords, t_tetriminos *cur, t_tetriminos *
 		 else if (!cur && (*head)->empty_cell > 0 && (*head)->used_empty_cell < (*head)->empty_cell)
 		{
 			delLastLevelFromSS(head);
-
 			setFreeCell(coords, map);
 			setEmptyCell(coords, map);
 		 	addCoordToStack(coords, head);

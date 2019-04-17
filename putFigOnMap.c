@@ -39,56 +39,6 @@ void freemap(char ** map)
 	free(map);
 }
 
-int  setFigStatus(int status, int curStatus, t_tetriminos **head)
-{
-	t_tetriminos * el;
-	el = *head;
-
-		while (el)
-		{
-			if (el->status == curStatus)
-				el->status = status; 
-
-			else if (curStatus != -1 && curStatus != 0 && curStatus != 1)
-			{
-				el->wasAt00 = 0;
-
-				el->status = status; 
-			}
-			el = el->next; 
-		}
-	
-	return status; 
-
-}
-
-
-int countStatus(int status, t_tetriminos **head)
-{
-	t_tetriminos * el;
-	el = *head;
-	int minus1 = 0;
-	int one = 0;
-	int zero = 0; 
-		
-		while (el)
-		{
-			if (el->status == -1)
-				minus1++;
-			else if (el->status == 0)
-				zero++;
-			else if (el->status == 1)
-				one++;
-			el = el->next; 
-		}
-
-		if (status == -1)
-			return minus1;
-		if (status == 0)
-			return zero;
-		else 
-			return one; 
-}
 
 t_tetriminos *findFigtoMap(t_tetriminos **head)
 {
@@ -192,7 +142,6 @@ int putFigOnMap(char ** map, int * coords, t_tetriminos * figure, t_tetriminos *
 		map[r_0 + figure->arr[3]][c_0 + figure->arr[2]] = figure->c;
 		map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] = figure->c;
 		map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
-		figure->status = 1;
 
 		addFigToSS(head, figure, (*head)->level);
 		return 1;
@@ -205,7 +154,6 @@ int putFigOnMap(char ** map, int * coords, t_tetriminos * figure, t_tetriminos *
 			return 0;
 		}
 		addFigToSS(head, figure, (*head)->level);
-		figure->status = -1;
 		return 0; 
 	}
 }
@@ -223,10 +171,7 @@ void deMapFig(char ** map, t_tetriminos * figure)
 		i++;
 	}	
 }
-void mark_cur_fig_minus(t_tetriminos * figure)
-{
-	figure->status = -1;
-}
+
 
 void displayMap(char ** map)
 {
@@ -245,34 +190,6 @@ void displayMap(char ** map)
 	}
 }
 
-
-int WasAt00(t_tetriminos ** head)
-{
-	t_tetriminos * el;
-	el = *head;
-		
-		while (el)
-		{
-			if (el->wasAt00 != 1)
-				return 0;
-			el = el->next;
-		}
-		return 1;
-}
-
-int checkAllStatus(t_tetriminos ** head, int status)
-{
-	t_tetriminos * el;
-	el = *head;
-		
-		while (el)
-		{
-			if (el->status != status)
-				return 0;
-			el = el->next;
-		}
-		return 1;
-}
 
 int 	setFreeCell(int * coords, char ** map)
 {
