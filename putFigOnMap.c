@@ -104,12 +104,10 @@ t_tetriminos * popFromStack_Str(t_tetriminos ** head)
 	return 0;
 }
 
-int putFigOnMap(char ** map, int * coords, t_tetriminos * figure, t_tetriminos ** head)
+int canPutFigOnMap(char ** map, unsigned int r_0, unsigned int c_0, t_tetriminos * figure, t_tetriminos ** head)
 {
 	int j = 0;
-	int r_0 = coords[0];
-	int c_0 = coords[1];
-
+	
 			    //  0 1  2 3  4 5  6,7
 	//int arr[8] = {0,0, 0,1, 0,2, 0,3};
 	// x - column
@@ -138,24 +136,32 @@ int putFigOnMap(char ** map, int * coords, t_tetriminos * figure, t_tetriminos *
 
 	if (j == 6)
 	{
-		map[r_0][c_0] = figure->c;
-		map[r_0 + figure->arr[3]][c_0 + figure->arr[2]] = figure->c;
-		map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] = figure->c;
-		map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
+		// map[r_0][c_0] = figure->c;
+		// map[r_0 + figure->arr[3]][c_0 + figure->arr[2]] = figure->c;
+		// map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] = figure->c;
+		// map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
 
-		addFigToSS(head, figure, (*head)->level);
+	//	addFigToSS(head, figure, (*head)->level);
 		return 1;
 	}
 	else 
 	{
-		if (r_0 == 0 && c_0 == 0)
-		{
-			addFigToSS_Beg00(head, figure);
-			return 0;
-		}
-		addFigToSS(head, figure, (*head)->level);
+		// if (r_0 == 0 && c_0 == 0)
+		// {
+		// 	addFigToSS_Beg00(head, figure);
+		// 	return 0;
+		// }
+		// addFigToSS(head, figure, (*head)->level);
 		return 0; 
 	}
+}
+
+void PutFigOnMap(char ** map, unsigned int r_0, unsigned int c_0, t_tetriminos * figure, t_tetriminos ** head)
+{
+	map[r_0][c_0] = figure->c;
+	map[r_0 + figure->arr[3]][c_0 + figure->arr[2]] = figure->c;
+	map[r_0 + figure->arr[5]][c_0 + figure->arr[4]] = figure->c;
+	map[r_0 + figure->arr[7]][c_0 + figure->arr[6]] = figure->c;
 }
 
 void deMapFig(char ** map, t_tetriminos * figure)
