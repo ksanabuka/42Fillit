@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validation.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: iiskakov <iiskakov@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/25 12:58:07 by iiskakov          #+#    #+#             */
+/*   Updated: 2019/04/25 13:44:16 by iiskakov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "fillit.h"
-t_tetr	*add_tetrimonos(char *buffer, t_tetr **head, int i)
+
+t_tetr		*add_tetrimonos(char *buffer, t_tetr **head, int i)
 {
-	t_tetr *el;
-	t_tetr *tmp;
+	t_tetr	*el;
+	t_tetr	*tmp;
 
 	el = (t_tetr *)malloc(sizeof(t_tetr));
 	if ((!el) || (!head))
@@ -21,20 +33,11 @@ t_tetr	*add_tetrimonos(char *buffer, t_tetr **head, int i)
 	return (el);
 }
 
-void	write_to_tetrimono(char *buffer, int i, t_tetr **el)
+int			cleanup(t_tetr **head)
 {
-	(*el)->c = i + 65;
-	(*el)->qty_fig = 0;
-	(*el)->arr = make_fig_coordinates(buffer);
-	(*el)->next = NULL;
-}
+	t_tetr	*el;
 
-
-int cleanup(t_tetr ** head)
-{
-	t_tetr * el;
 	el = *head;
-
 	if (el)
 	{
 		if (el->next)
@@ -43,10 +46,10 @@ int cleanup(t_tetr ** head)
 		free(el);
 		*head = NULL;
 	}
-	return 1;
+	return (1);
 }
 
-int	delete_nl(char *str)
+int			delete_nl(char *str)
 {
 	char	*s;
 
@@ -68,10 +71,10 @@ int	delete_nl(char *str)
 	return (0);
 }
 
-int		validate_figure_by_connections(char *s)
+int			validate_figure_by_connections(char *s)
 {
-	int i;
-	int count;
+	int		i;
+	int		count;
 
 	i = 0;
 	count = 0;
@@ -90,12 +93,12 @@ int		validate_figure_by_connections(char *s)
 	return (count == 6 || count == 8);
 }
 
-int		validate_figure_by_chars(char *s)
+int			validate_figure_by_chars(char *s)
 {
-	int	count_hash;
-	int	count_dots;
-	int	count_nl;
-	int	i;
+	int		count_hash;
+	int		count_dots;
+	int		count_nl;
+	int		i;
 
 	count_hash = 0;
 	count_dots = 0;
@@ -117,7 +120,3 @@ int		validate_figure_by_chars(char *s)
 	}
 	return (count_hash == 4 && count_dots == 12 && count_nl == 4);
 }
-
-
-
-

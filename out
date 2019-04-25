@@ -1,0 +1,144 @@
+Norme: ./make_fig_coordinates.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 6): C++ comment
+Error (line 7): C++ comment
+Error (line 9): bad spacing after make_fig_coordinates
+Error (line 37): multiple empty lines
+Error (line 38): bad spacing before convert_coordinates
+Error (line 58): multiple empty lines
+Error (line 59): multiple empty lines
+Norme: ./map.c
+Error: global scope bad aligned
+Error: 42 header not at top of the file
+Error (line 3): Space before function name
+Error (line 3): declarations must be followed by one empty line in destroy_map
+Error (line 3, col 22): space after pointer
+Error (line 5, col 5): i is instanciated during declaration
+Error (line 7, col 9): missing parentheses in return statement
+Error (line 8, col 11): bad spacing
+Error (line 18): Space before function name
+Error (line 18): declarations must be followed by one empty line in find_min_sq_width
+Error (line 18, col 22): numFigs not unixcase
+Error (line 20, col 5): arr is instanciated during declaration
+Error (line 20, col 9): space before [
+Error (line 21, col 5): sq is instanciated during declaration
+Error (line 22, col 5): i is instanciated during declaration
+Error (line 23): spaces at the end of line
+Error (line 24): missing newline after while
+Error (line 24): spaces at the end of line
+Error (line 27, col 10): missing parentheses in return statement
+Error (line 30, col 8): missing parentheses in return statement
+Error (line 33): Space before function name
+Error (line 35, col 5): lenght is instanciated during declaration
+Error (line 37, col 5): i is instanciated during declaration
+Norme: ./validation.c
+Error (line 36): declarations must be followed by one empty line in cleanup
+Error (line 39): spaces at the end of line
+Norme: ./putFigOnMap.c
+Error: global scope bad aligned
+Error: bad filename : putFigOnMap.c
+Error: 42 header not at top of the file
+Error (line 20): can_put_fig_on_map have 5 parameters
+Error (line 20): function can_put_fig_on_map has 28 lines
+Error (line 20): line has 89 characters
+Error (line 20, col 44): bad spacing
+Error (line 27): line has 140 characters
+Error (line 29): line has 140 characters
+Error (line 31): line has 140 characters
+Error (line 33): line has 140 characters
+Error (line 48): spaces at the end of line
+Error (line 49): spaces at the end of line
+Error (line 52): Space before function name
+Error (line 52, col 26): space after pointer
+Error (line 52, col 32): bad spacing
+Error (line 52, col 42): bad spacing
+Error (line 52, col 60): space after pointer
+Error (line 60): declarations in demap_fig are bad aligned
+Error (line 60): Space before function name
+Error (line 60, col 21): space after pointer
+Error (line 60, col 35): space after pointer
+Error (line 60, col 53): space after pointer
+Error (line 68): bad indentation
+Error (line 68): spaces at the end of line
+Error (line 69, col 46): space before )
+Error (line 69, col 47): missing space around !=
+Error (line 72): spaces at the end of line
+Error (line 72, col 1): no newline after block
+Norme: ./try1.c
+Error: global scope bad aligned
+Error: 6 functions in the file
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 3): Space before function name
+Error (line 3): function find_solution has 30 lines
+Error (line 3): declarations must be followed by one empty line in find_solution
+Error (line 3, col 24): space after pointer
+Error (line 4): spaces at the end of line
+Error (line 4, col 0): no newline after block
+Error (line 8): spaces at the end of line
+Error (line 11, col 9): missing parentheses in return statement
+Error (line 13): spaces at the end of line
+Error (line 14): spaces at the end of line
+Error (line 14, col 6): bad character after ;
+Error (line 26, col 12): missing parentheses in return statement
+Error (line 34, col 8): missing parentheses in return statement
+Error (line 37): declarations in find_best_solution are bad aligned
+Error (line 37): Space before function name
+Error (line 37): declarations in find_best_solution must be at the top of the function
+Error (line 37): declarations must be followed by one empty line in find_best_solution
+Error (line 39): bad indentation
+Error (line 39): spaces at the end of line
+Error (line 40, col 7): space after pointer
+Error (line 40, col 9): map is instanciated during declaration
+Error (line 42, col 8): space after pointer
+Error (line 42, col 10): cur is instanciated during declaration
+Error (line 48, col 6): status is instanciated during declaration
+Error (line 51, col 10): missing parentheses in return statement
+Error (line 55, col 8): missing parentheses in return statement
+Error (line 58): Space before function name
+Error (line 61): spaces at the end of line
+Error (line 61, col 9): missing parentheses in return statement
+Error (line 61, col 10): bad character after ;
+Error (line 63): missing newline after if
+Error (line 63): spaces at the end of line
+Error (line 64, col 9): missing parentheses in return statement
+Error (line 65): spaces at the end of line
+Error (line 65, col 8): missing parentheses in return statement
+Error (line 68): Space before function name
+Error (line 68, col 0): set_qtyFig_MinSq not unixcase
+Error (line 72, col 8): missing parentheses in return statement
+Error (line 75): declarations in readFile are bad aligned
+Error (line 75): Space before function name
+Error (line 75): declarations must be followed by one empty line in readFile
+Error (line 75): bad spacing after readFile
+Error (line 75, col 0): readFile not unixcase
+Error (line 75, col 18): space after pointer
+Error (line 81): spaces at the end of line
+Error (line 89): spaces at the end of line
+Error (line 89, col 10): missing parentheses in return statement
+Error (line 93): spaces at the end of line
+Error (line 93, col 32): bad character after ;
+Error (line 97): spaces at the end of line
+Error (line 97, col 10): missing parentheses in return statement
+Error (line 97, col 12): bad character after ;
+Error (line 99, col 8): missing parentheses in return statement
+Error (line 101): bad indentation
+Error (line 101): spaces at the end of line
+Error (line 102): declarations in main are bad aligned
+Error (line 102): Space before function name
+Error (line 102): Spacing after function name
+Error (line 102): declarations in main must be at the top of the function
+Error (line 102): bad spacing before main
+Error (line 102, col 24): space after pointer
+Error (line 104, col 9): head is instanciated during declaration
+Error (line 107, col 9): missing parentheses in return statement
+Error (line 115): spaces at the end of line
+Error (line 115, col 16): bad character after ;
+Error (line 118, col 7): space after pointer
+Error (line 118, col 9): map is instanciated during declaration
+Error (line 121): spaces at the end of line
+Error (line 122): spaces at the end of line
+Error (line 122, col 24): bad character after ;
+Error (line 123, col 8): missing parentheses in return statement
