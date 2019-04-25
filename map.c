@@ -1,11 +1,13 @@
 #include "fillit.h"
 
-int destroy_map(char ** map, t_tetr **head)
+int		destroy_map(char ** map, t_tetr **head)
 {
-	int i = 0;
+	int i;
+
+	i = 0;
 	if (!map)
-		return 1;
-	while (i <  ((*head)->curmap_length) - 1)
+		return (1);
+	while (i < ((*head)->curmap_length) - 1)
 	{
 		free(map[i]);
 		i++;
@@ -15,27 +17,31 @@ int destroy_map(char ** map, t_tetr **head)
 	return (1);
 }
 
-int find_min_sq_width(int numFigs)
+int		find_min_sq_width(int numfigs)
 {
-	int arr [12] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121};
-	int sq = numFigs * 4;
-	int i = 0;
-	
-	while (i < 12)   
+	int arr[12] = {0, 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121};
+	int sq;
+	int i;
+
+	sq = numfigs * 4;
+	i = 0;
+	while (i < 12)
 	{
 		if (sq <= arr[i])
-			return i;
+			return (i);
 		++i;
 	}
-	return i;
+	return (i);
 }
 
-void display_map(char **map, t_tetr **head)
+void	display_map(char **map, t_tetr **head)
 {
-	int lenght = (*head)->curmap_length;
+	int	lenght;
 	int j;
-	int i = 0;
+	int i;
 
+	lenght = (*head)->curmap_length;
+	i = 0;
 	while (i < lenght)
 	{
 		j = 0;
@@ -59,19 +65,20 @@ void	write_to_tetrimono(char *buffer, int i, t_tetr **el)
 
 char **find_best_solution(t_tetr **head)
 {
-	
-	char **map;
-	(*head)->curmap_length = find_min_sq_width((*head)->qty_fig);
-	t_tetr *cur = (*head);
-	map = NULL;
+	char	**map;
+	t_tetr	*cur;
+	int		status;
 
+	(*head)->curmap_length = find_min_sq_width((*head)->qty_fig);
+	cur = (*head);
+	map = NULL;
 	while (1)
 	{
 		destroy_map(map, head);
 		map = create_map((*head)->curmap_length);
-		int status = find_solution(map, cur, head);
+		status = find_solution(map, cur, head);
 		if (status)
-			return map;
+			return (map);
 		(*head)->curmap_length++;
 	}
 	return (NULL);
