@@ -96,21 +96,18 @@ int readFile(char * av, t_tetr **head)
 	int readsize;
 	char buffer[21];
 	ft_bzero(buffer, 21);
-	t_tetr *el;
 
 	fd = open(av, O_RDONLY);
-	int tmp = 0;
 
 	while (i <= 27)
 	{
 		readsize = read(fd, buffer, 20);
-		tmp = validate_figure_by_chars(buffer);
-		if (readsize != 20 || !validate_figure_by_chars(buffer))
+		if (!validate_figure_by_chars(buffer) || readsize != 20)
 			return -1;		
 		delete_nl(buffer);
 		if (!validate_figure_by_connections(buffer))	
 			return -1;		
-		el = add_tetrimonos(buffer, head, i);
+		add_tetrimonos(buffer, head, i);
 		i++;
 		if (i == 27)
 			return -1;		
