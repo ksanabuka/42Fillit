@@ -118,63 +118,6 @@ int		validate_figure_by_chars(char *s)
 	return (count_hash == 4 && count_dots == 12 && count_nl == 4);
 }
 
-int readFile(char * av, t_tetr **head)
-{
-	int i = 0;
-
-	int fd;
-	int readsize;
-	char buffer[21];
-	ft_bzero(buffer, 21);
-	t_tetr *el;
-	int status;
-
-	fd = open(av, O_RDONLY);
-
-	int tmp = 0;
-
-	while (i <= 27)
-	{
-		readsize = read(fd, buffer, 20);
-		tmp = validate_figure_by_chars(buffer);
-		if (readsize != 20 || !validate_figure_by_chars(buffer))
-		{	
-			status = cleanup(head);
-			return -1;
-		}
-		delete_nl(buffer);
-		if (!validate_figure_by_connections(buffer))	
-		{			
-			status = cleanup(head);
-			return -1;		
-		}
-		el = add_tetrimonos(buffer, head, i);
-		i++;
-		if (i == 27)
-		{			
-			status = cleanup(head);
-			return -1;		
-		}
-		buffer[0] = '\0';
-		readsize = read(fd, buffer, 1);		
-		if (readsize == 0)
-		{	
-			(*head)->qty_fig = i;
-			(*head)->curmap_length = find_min_sq_width((*head)->qty_fig);
-			return 5;
-		}
-		else if (buffer[0] != '\n' || readsize < 0)
-		{			
-			status = cleanup(head);
-			return -1;		
-		}
-	}
-	
-			return 5;
-}
-
-
-
 
 
 
